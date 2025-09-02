@@ -9,21 +9,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-class UserData {
-
-    @JsonProperty("user_email")
-    String userEmail;
-
-    @JsonProperty("user_name")
-    String userName;
-
-    @JsonProperty("active_roles")
-    List<String> activeRoles;
-
-    @JsonProperty("user_token")
-    String userToken;
-}
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -36,6 +21,15 @@ public class LoginResp {
     @JsonProperty("user_password")
     private int status;
 
-    @JsonProperty("user_data")
-    private UserData userData;
+    @JsonProperty("user_token")
+    String userToken;
+
+    @JsonProperty("user_email")
+    String userEmail;
+
+    @JsonProperty("user_name")
+    String userName;
+
+    @JsonProperty("active_roles")
+    List<String> activeRoles;
 }

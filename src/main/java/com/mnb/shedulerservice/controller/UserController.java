@@ -1,7 +1,9 @@
 package com.mnb.shedulerservice.controller;
 
+import com.mnb.shedulerservice.dto.request.LoginReq;
 import com.mnb.shedulerservice.dto.response.CreateTaskResp;
 import com.mnb.shedulerservice.dto.request.CreateTaskReq;
+import com.mnb.shedulerservice.dto.response.LoginResp;
 import com.mnb.shedulerservice.model.Task;
 import com.mnb.shedulerservice.servcie.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,5 +38,15 @@ public class UserController {
     @DeleteMapping("/delete-user")
     public ResponseEntity deleteUser() {
         return null;
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(LoginReq loginReq) {
+        try {
+            LoginResp loginResp =  userService.login(loginReq);
+            return  ResponseEntity.status(HttpStatus.OK).body(loginResp);
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Something went wrong");
+        }
     }
 }

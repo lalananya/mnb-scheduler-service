@@ -1,6 +1,7 @@
 package com.mnb.shedulerservice.servcie;
 
 
+import com.mnb.shedulerservice.config.JwtConfig;
 import com.mnb.shedulerservice.dto.request.LoginReq;
 import com.mnb.shedulerservice.dto.response.LoginResp;
 import com.mnb.shedulerservice.model.User;
@@ -22,6 +23,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    JwtConfig jwtConfig;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -51,12 +55,24 @@ public class UserService implements UserDetailsService {
     public LoginResp login(LoginReq loginReq) {
         Optional<User> foundUser = userRepository.findByUsername(loginReq.getUserName());
         User user = foundUser.orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
-
+        LoginResp loginResp = new LoginResp();
         if(user.getUserPassword().equals(loginReq.getUserPassword())) {
             // password is same
             // generate a token
             // create loginResp and then return
-        }
+            String token = jwtConfig.generateToken(user.getUserName());
 
+            loginResp.setUserToken(token);
+            loginResp.setUserName(user.getUserName());
+            loginResp.setUserEmail(user.getUserEmail());
+            loginResp.setStatus(200);
+            loginResp.setMessage("Logged In Successfully");
+            loginResp.setActiveRoles(user.getUserRole());
+            return loginResp;
+        }
+        loginResp.setStatus(400);
+        loginResp.setMessage("Bad Request");
+
+        return loginResp;
     }
 }

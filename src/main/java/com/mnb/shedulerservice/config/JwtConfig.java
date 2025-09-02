@@ -1,6 +1,8 @@
 package com.mnb.shedulerservice.config;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.context.annotation.Configuration;
@@ -38,13 +40,28 @@ public class JwtConfig {
     // is also used to judge which user has request what API, and we can
     // add authorization access to those users as well
 
-    public String validateToken(String token) {
-        // we have extracted username, but for validation we also need to check
-        // if it has current token or not
-        String username = Jwts.parserBuilder()
+    public boolean validateToken(String token) {
+        // we need to check if the token is not expired -> extractUsername(token)
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token);
+            return true;
+        }catch (ExpiredJwtException e) {
+            System.out.println("Token expired: " + e.getMessage());
+        }catch (MalformedJwtException e) {
+            System.out.println("Invalid token format: " + e.getMessage());
+        }catch (Exception e) {
+            System.out.println("Token validation error: " + e.getMessage());
+        }
+        return false;
+    }
+    // we have extracted username, this you can use for other services or something
+    public String extractUsername(String token) {
+        return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build().parseClaimsJws(token)
                 .getBody().getSubject();
-        return username;
     }
 }
