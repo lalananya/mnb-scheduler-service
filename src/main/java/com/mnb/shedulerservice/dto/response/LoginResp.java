@@ -18,7 +18,7 @@ public class LoginResp {
     @JsonProperty("user_name")
     private String message;
 
-    @JsonProperty("user_password")
+    @JsonProperty("status")
     private int status;
 
     @JsonProperty("user_token")
@@ -31,5 +31,5 @@ public class LoginResp {
     String userName;
 
     @JsonProperty("active_roles")
-    List<String> activeRoles;
+    String activeRoles;
 }

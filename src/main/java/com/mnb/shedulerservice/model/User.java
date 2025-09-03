@@ -30,7 +30,11 @@ public class User {
     @JsonProperty("user_email")
     private String userEmail;
 
-    @Column(nullable = false, name = "user_role")
+    @Column(name = "user_role")
     @JsonProperty("user_role")
-    private List<String> userRole;
+    private String  userRole;
+
+    @Column(nullable = false, name = "user_dob")
+    @JsonProperty("user_dob")
+    private String userDob;
 }

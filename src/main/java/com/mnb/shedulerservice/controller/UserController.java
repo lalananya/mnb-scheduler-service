@@ -1,6 +1,7 @@
 package com.mnb.shedulerservice.controller;
 
 import com.mnb.shedulerservice.dto.request.LoginReq;
+import com.mnb.shedulerservice.dto.request.SignUpReq;
 import com.mnb.shedulerservice.dto.response.CreateTaskResp;
 import com.mnb.shedulerservice.dto.request.CreateTaskReq;
 import com.mnb.shedulerservice.dto.response.LoginResp;
@@ -44,6 +45,16 @@ public class UserController {
     public ResponseEntity<?> login(LoginReq loginReq) {
         try {
             LoginResp loginResp =  userService.login(loginReq);
+            return  ResponseEntity.status(HttpStatus.OK).body(loginResp);
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Something went wrong");
+        }
+    }
+
+    @PostMapping("/sign-up")
+    public ResponseEntity<?> signUp(SignUpReq signUpReq) {
+        try {
+            LoginResp loginResp =  userService.signUp(signUpReq);
             return  ResponseEntity.status(HttpStatus.OK).body(loginResp);
         }catch (Exception e) {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Something went wrong");

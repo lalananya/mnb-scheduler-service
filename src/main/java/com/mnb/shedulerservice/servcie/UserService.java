@@ -3,6 +3,7 @@ package com.mnb.shedulerservice.servcie;
 
 import com.mnb.shedulerservice.config.JwtConfig;
 import com.mnb.shedulerservice.dto.request.LoginReq;
+import com.mnb.shedulerservice.dto.request.SignUpReq;
 import com.mnb.shedulerservice.dto.response.LoginResp;
 import com.mnb.shedulerservice.model.User;
 import com.mnb.shedulerservice.repository.UserRepository;
@@ -22,10 +23,16 @@ import java.util.stream.Collectors;
 public class UserService implements UserDetailsService {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    JwtConfig jwtConfig;
+    private JwtConfig jwtConfig;
+
+    @Autowired
+    private ServiceHelperDB serviceHelperDB;
+
+    @Autowired
+    private ServiceHelperClient serviceHelperClient;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -36,9 +43,10 @@ public class UserService implements UserDetailsService {
 
         // SimpleGrantedAuthority::new - this will just passs the string
         // lets say instead of List<String>, you have List<enum>, then you can use getName()
-        List<SimpleGrantedAuthority> authorities = user.getUserRole() != null ? (
-                user.getUserRole().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList())
-                ) : new ArrayList<>();
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        if (user.getUserRole() != null && !user.getUserRole().isEmpty()) {
+            authorities.add(new SimpleGrantedAuthority(user.getUserRole()));
+        }
 
         return new org.springframework.security.core.userdetails.User(
                 user.getUserName(),
@@ -55,24 +63,36 @@ public class UserService implements UserDetailsService {
     public LoginResp login(LoginReq loginReq) {
         Optional<User> foundUser = userRepository.findByUsername(loginReq.getUserName());
         User user = foundUser.orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
-        LoginResp loginResp = new LoginResp();
-        if(user.getUserPassword().equals(loginReq.getUserPassword())) {
-            // password is same
-            // generate a token
-            // create loginResp and then return
-            String token = jwtConfig.generateToken(user.getUserName());
-
-            loginResp.setUserToken(token);
-            loginResp.setUserName(user.getUserName());
-            loginResp.setUserEmail(user.getUserEmail());
-            loginResp.setStatus(200);
-            loginResp.setMessage("Logged In Successfully");
-            loginResp.setActiveRoles(user.getUserRole());
+        // in real world, we throw error response -> to handle no username found case
+        LoginResp loginResp;
+        try {
+            if(serviceHelperClient.validateClientCredentials(user, loginReq.getUserPassword())) {
+                // password is same, generates a token
+                String token = jwtConfig.generateToken(user.getUserName());
+                // create loginResp and then return
+                loginResp = serviceHelperClient.createClientLoginResponse(user, token, "Logged In Successfully", 200);
+            }
+            else {
+                loginResp = serviceHelperClient.createClientLoginResponse(user, "", "Invalid Username / Password", 400);
+            }
+            return loginResp;
+        } catch (Exception e) {
+            loginResp = serviceHelperClient.createClientLoginResponse(user, "", "Something Went Wrong", 500);
             return loginResp;
         }
-        loginResp.setStatus(400);
-        loginResp.setMessage("Bad Request");
+    }
 
-        return loginResp;
+    public LoginResp signUp(SignUpReq signUpReq) {
+        LoginResp loginResp;
+        User user = serviceHelperDB.parseSignUpResponse(signUpReq);
+        try {
+            user = userRepository.save(user);
+            String token = jwtConfig.generateToken(user.getUserName());
+            loginResp = serviceHelperClient.createClientLoginResponse(user, token, "Logged In Successfully", 200);
+            return loginResp;
+        }catch (Exception e) {
+            loginResp = serviceHelperClient.createClientLoginResponse(user, "", "Something Went Wrong", 500);
+            return loginResp;
+        }
     }
 }
