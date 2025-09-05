@@ -14,22 +14,58 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class LoginResp {
-
-    @JsonProperty("user_name")
     private String message;
-
-    @JsonProperty("status")
     private int status;
+    private String userToken;
+    private String userEmail;
+    private String username;
+    private String activeRoles;
 
-    @JsonProperty("user_token")
-    String userToken;
+    public String getMessage() {
+        return message;
+    }
 
-    @JsonProperty("user_email")
-    String userEmail;
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
-    @JsonProperty("user_name")
-    String userName;
+    public int getStatus() {
+        return status;
+    }
 
-    @JsonProperty("active_roles")
-    String activeRoles;
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public String getUserToken() {
+        return userToken;
+    }
+
+    public void setUserToken(String userToken) {
+        this.userToken = userToken;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getActiveRoles() {
+        return activeRoles;
+    }
+
+    public void setActiveRoles(String activeRoles) {
+        this.activeRoles = activeRoles;
+    }
 }

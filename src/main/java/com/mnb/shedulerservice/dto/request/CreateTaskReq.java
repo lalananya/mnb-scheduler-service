@@ -9,15 +9,40 @@ import lombok.*;
 @Builder
 public class CreateTaskReq {
 
-    @JsonProperty("task_name")
     private String taskName;
-
-    @JsonProperty("task_description")
     private String taskDescription;
-
-    @JsonProperty("task_detail")
     private String taskDetail; // metaDAta
-
-    @JsonProperty("task_scheduled_for")
     private String taskScheduledFor; // time
+
+    public String getTaskName() {
+        return taskName;
+    }
+
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
+    }
+
+    public String getTaskDescription() {
+        return taskDescription;
+    }
+
+    public void setTaskDescription(String taskDescription) {
+        this.taskDescription = taskDescription;
+    }
+
+    public String getTaskDetail() {
+        return taskDetail;
+    }
+
+    public void setTaskDetail(String taskDetail) {
+        this.taskDetail = taskDetail;
+    }
+
+    public String getTaskScheduledFor() {
+        return taskScheduledFor;
+    }
+
+    public void setTaskScheduledFor(String taskScheduledFor) {
+        this.taskScheduledFor = taskScheduledFor;
+    }
 }

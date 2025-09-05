@@ -18,7 +18,7 @@ public class ServiceHelperClient {
         else {
             loginResp.setStatus(status);
             loginResp.setUserToken(token);
-            loginResp.setUserName(user.getUserName());
+            loginResp.setUsername(user.getUsername());
             loginResp.setUserEmail(user.getUserEmail());
             loginResp.setActiveRoles(user.getUserRole());
         }

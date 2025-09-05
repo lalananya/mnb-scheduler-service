@@ -11,17 +11,48 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class CreateTaskResp {
 
-    @JsonProperty("message")
     private String message;
-
-    @JsonProperty("status")
     private int status;
-
-    @JsonProperty("task-data")
     private List<Task> taskData;
+    private String taskScheduledFor;
 
+    public CreateTaskResp(String message, int status, List<Task> taskData) {
+        this.message = message;
+        this.status = status;
+        this.taskData = taskData;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public List<Task> getTaskData() {
+        return taskData;
+    }
+
+    public void setTaskData(List<Task> taskData) {
+        this.taskData = taskData;
+    }
+
+    public String getTaskScheduledFor() {
+        return taskScheduledFor;
+    }
+
+    public void setTaskScheduledFor(String taskScheduledFor) {
+        this.taskScheduledFor = taskScheduledFor;
+    }
 }

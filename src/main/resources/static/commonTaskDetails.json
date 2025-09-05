@@ -1,0 +1,4 @@
+{
+  "typeOptions": ["User Defined", "Report Generation", "Subscriptions", "Clean DB", "Clean Caches"],
+  "frequencyOptions": ["Every Day", "Every Month", "Every Year", "Custom"]
+}

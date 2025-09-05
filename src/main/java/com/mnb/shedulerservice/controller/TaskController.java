@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -21,12 +22,16 @@ public class TaskController {
     @GetMapping("/get-task")
     public ResponseEntity<?> getTask() throws Exception {
        List<Task> allTasks = taskService.getTasks();
+       CreateTaskResp createTaskResp;
        try {
            if(!allTasks.isEmpty()) {
-               CreateTaskResp createTaskResp = new CreateTaskResp("Task Fetched Successfully", 200,  allTasks);
+               createTaskResp = new CreateTaskResp("Task Fetched Successfully", 200,  allTasks);
                return ResponseEntity.status(HttpStatus.OK).body(createTaskResp);
            }
-           else return ResponseEntity.status(HttpStatus.OK).body("No tasks found");
+           else {
+               createTaskResp = new CreateTaskResp("No tasks found", 200,  new ArrayList<>());
+               return ResponseEntity.status(HttpStatus.OK).body(createTaskResp);
+           }
        }catch (Exception e) {
            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Something went wrong");
        }

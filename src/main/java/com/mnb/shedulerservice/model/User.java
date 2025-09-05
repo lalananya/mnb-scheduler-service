@@ -15,26 +15,68 @@ public class User {
     @Id
     @GeneratedValue
     @Column(name = "user_id")
-    @JsonProperty("user_id")
     private UUID userId;
 
     @Column(nullable = false, name = "user_name")
-    @JsonProperty("user_name")
-    private String userName;
+    private String username;
 
     @Column(columnDefinition = "TEXT", name = "user_password")
-    @JsonProperty("user_password")
     private String userPassword;
 
     @Column(nullable = false, name = "user_email")
-    @JsonProperty("user_email")
     private String userEmail;
 
     @Column(name = "user_role")
-    @JsonProperty("user_role")
     private String  userRole;
 
     @Column(nullable = false, name = "user_dob")
-    @JsonProperty("user_dob")
     private String userDob;
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getUserPassword() {
+        return userPassword;
+    }
+
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
+    public String getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(String userRole) {
+        this.userRole = userRole;
+    }
+
+    public String getUserDob() {
+        return userDob;
+    }
+
+    public void setUserDob(String userDob) {
+        this.userDob = userDob;
+    }
 }

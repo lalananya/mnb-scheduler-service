@@ -43,16 +43,20 @@ public class UserService implements UserDetailsService {
 
         // SimpleGrantedAuthority::new - this will just passs the string
         // lets say instead of List<String>, you have List<enum>, then you can use getName()
-        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        if (user.getUserRole() != null && !user.getUserRole().isEmpty()) {
-            authorities.add(new SimpleGrantedAuthority(user.getUserRole()));
-        }
 
-        return new org.springframework.security.core.userdetails.User(
-                user.getUserName(),
-                user.getUserPassword(),
-                authorities
-        );
+        if(user != null) {
+            List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+            if (user.getUserRole() != null && !user.getUserRole().isEmpty()) {
+                authorities.add(new SimpleGrantedAuthority(user.getUserRole()));
+            }
+
+            return new org.springframework.security.core.userdetails.User(
+                    user.getUsername(),
+                    user.getUserPassword(),
+                    authorities
+            );
+        }
+        return null;
 
         // in user class which spring understand, we have sent our username, password and role
         // these things are already provided by string thus we are using it,
@@ -61,14 +65,14 @@ public class UserService implements UserDetailsService {
     }
 
     public LoginResp login(LoginReq loginReq) {
-        Optional<User> foundUser = userRepository.findByUsername(loginReq.getUserName());
+        Optional<User> foundUser = userRepository.findByUsername(loginReq.getUsername());
         User user = foundUser.orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
         // in real world, we throw error response -> to handle no username found case
         LoginResp loginResp;
         try {
             if(serviceHelperClient.validateClientCredentials(user, loginReq.getUserPassword())) {
                 // password is same, generates a token
-                String token = jwtConfig.generateToken(user.getUserName());
+                String token = jwtConfig.generateToken(user.getUsername());
                 // create loginResp and then return
                 loginResp = serviceHelperClient.createClientLoginResponse(user, token, "Logged In Successfully", 200);
             }
@@ -87,7 +91,7 @@ public class UserService implements UserDetailsService {
         User user = serviceHelperDB.parseSignUpResponse(signUpReq);
         try {
             user = userRepository.save(user);
-            String token = jwtConfig.generateToken(user.getUserName());
+            String token = jwtConfig.generateToken(user.getUsername());
             loginResp = serviceHelperClient.createClientLoginResponse(user, token, "Logged In Successfully", 200);
             return loginResp;
         }catch (Exception e) {

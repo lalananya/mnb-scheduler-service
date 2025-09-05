@@ -12,9 +12,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CreateUserResp {
 
-    @JsonProperty("message")
     private String message;
-
-    @JsonProperty("status")
     private int status;
 }

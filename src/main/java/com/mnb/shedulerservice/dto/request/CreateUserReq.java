@@ -12,12 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CreateUserReq {
 
-    @JsonProperty("user_name")
-    private String userName;
-
-    @JsonProperty("user_password")
+    private String username;
     private String userPassword;
-
-    @JsonProperty("user_email")
     private String userEmail;
 }

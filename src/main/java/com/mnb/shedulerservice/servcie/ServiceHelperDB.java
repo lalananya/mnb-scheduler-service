@@ -16,7 +16,7 @@ public class ServiceHelperDB {
         user.setUserRole("USER");
         user.setUserPassword(signUpReq.getUserPassword());
         user.setUserEmail(signUpReq.getUserEmail());
-        user.setUserName(signUpReq.getUserName());
+        user.setUsername(signUpReq.getUsername());
         return user;
     }
 }

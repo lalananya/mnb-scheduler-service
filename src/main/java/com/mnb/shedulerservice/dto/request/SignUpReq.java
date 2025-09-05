@@ -12,15 +12,40 @@ import lombok.NoArgsConstructor;
 @Builder
 public class SignUpReq {
 
-    @JsonProperty("user_name")
-    private String userName;
-
-    @JsonProperty("user_password")
+    private String username;
     private String userPassword;
-
-    @JsonProperty("user_email")
     private String userEmail;
-
-    @JsonProperty("user_dob")
     private String userDob;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getUserPassword() {
+        return userPassword;
+    }
+
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
+    public String getUserDob() {
+        return userDob;
+    }
+
+    public void setUserDob(String userDob) {
+        this.userDob = userDob;
+    }
 }
